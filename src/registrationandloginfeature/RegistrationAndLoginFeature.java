@@ -56,7 +56,8 @@ public class RegistrationAndLoginFeature {
 
     private static void registerUser() {
         System.out.println("\n--- Registration ---");
-
+        
+    // Ask for first name and validate it
         String firstName = readValidField(
                 "Enter first name: ",
                 Login::isValidName
