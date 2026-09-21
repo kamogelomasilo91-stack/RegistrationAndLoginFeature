@@ -39,6 +39,7 @@ public class RegistrationAndLoginFeature {
                     loginUser();
                     break;
                 case "3":
+                    //Exit condition
                     running = false;
                     System.out.println("Goodbye!");
                     break;
