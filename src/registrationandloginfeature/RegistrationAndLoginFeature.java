@@ -21,7 +21,7 @@ public class RegistrationAndLoginFeature {
 
     public static void main(String[] args) {
         boolean running = true;
-        // This a menu.
+        // This is the main program loop that shows a menu.
         while (running) {
             System.out.println("\n===== MENU =====");
             System.out.println("1. Register");
@@ -134,7 +134,8 @@ public class RegistrationAndLoginFeature {
 
         Login matchedUser = findUser(userName, password);
 
-        if (matchedUser != null) {
+        if (matchedUser != null) { 
+            //login details matched an existing user
             System.out.println("Login successful. Welcome " + matchedUser.getFirstName()
                     + " " + matchedUser.getLastName() + "!");
         } else {
