@@ -44,6 +44,7 @@ public class RegistrationAndLoginFeature {
                     System.out.println("Goodbye!");
                     break;
                 default:
+                    // Inputs are handle that aren't 1,2 or 3
                     System.out.println("Invalid option, please choose 1, 2 or 3.");
             }
         }
