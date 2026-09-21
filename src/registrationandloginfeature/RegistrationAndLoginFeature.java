@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class RegistrationAndLoginFeature {
 
    // Single Scanner
-
+   // streams on system
     private static final Scanner scanner = new Scanner(System.in);
 
     // Stores every successfully registered user so they can later log in.
