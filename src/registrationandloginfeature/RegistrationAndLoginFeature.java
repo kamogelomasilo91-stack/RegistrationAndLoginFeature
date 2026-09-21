@@ -23,6 +23,7 @@ public class RegistrationAndLoginFeature {
         boolean running = true;
         // This is the main program loop that shows a menu.
         while (running) {
+            // Menu
             System.out.println("\n===== MENU =====");
             System.out.println("1. Register");
             System.out.println("2. Login");
