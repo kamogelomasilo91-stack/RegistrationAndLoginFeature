@@ -12,7 +12,7 @@ import java.util.Scanner;
  */
 public class RegistrationAndLoginFeature {
 
-   
+   // Single Scanner
 
     private static final Scanner scanner = new Scanner(System.in);
 
