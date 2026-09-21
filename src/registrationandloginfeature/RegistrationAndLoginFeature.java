@@ -124,7 +124,7 @@ public class RegistrationAndLoginFeature {
 
     private static void loginUser() {
         System.out.println("\n--- Login ---");
-
+    // If no one is registered nothing to log in
         if (registeredUsers.isEmpty()) {
             System.out.println("No registered users yet. Please register first.");
             return;
