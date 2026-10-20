@@ -32,7 +32,7 @@ public class Login {
         this.lastName = lastName;
     }
 
-    // ---------- Getters ----------
+    // ---------- GETTERS ----------
 
     public String getUserName() {
         return userName;
