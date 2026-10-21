@@ -6,10 +6,6 @@ package registrationandloginfeature;
 
 import java.util.Scanner;
 
-/**
- *
- * @author kgmas
- */
 
 //This class manages the Quick Chat application//
 public class QuickChat {

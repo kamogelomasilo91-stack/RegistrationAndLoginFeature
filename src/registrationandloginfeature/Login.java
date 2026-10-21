@@ -6,10 +6,6 @@
 package registrationandloginfeature;
 import java.util.regex.Pattern;
 
-/**
- *
- * @author kgmas
- */
 
 public class Login {
 
