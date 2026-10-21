@@ -6,10 +6,7 @@ package registrationandloginfeature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-/**
- *
- * @author kgmas
- */
+
 public class RegistrationAndLoginFeature {
 
    // Single Scanner
