@@ -4,10 +4,7 @@
  */
 package registrationandloginfeature;
 
-/**
- *
- * @author kgmas
- */
+
 
 import java.io.FileWriter;
 import java.io.IOException;
