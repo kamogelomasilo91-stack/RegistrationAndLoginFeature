@@ -4,20 +4,33 @@
  */
 
 package registrationandloginfeature;
-import java.util.regex.Pattern;
 
+import java.util.regex.Pattern;
 
 public class Login {
 
-    private String userName;
-    private String password;
-    private String cellPhoneNumber;
-    private String firstName;
-    private String lastName;
+    // Cell phone rule: international code (+ and 1-3 digits) followed by a number
+    // of no more than ten digits.
+    // REFERENCE: [add the website/author you used for this regex, plus the date you
+    // accessed it. The brief requires a proper attribution here.]
+    private static final Pattern CELL_PATTERN = Pattern.compile("^\\+\\d{1,3}\\d{1,10}$");
 
-    // South African cellphone number format, e.g. +27838968976
-    private static final Pattern CELLPHONE_PATTERN =
-            Pattern.compile("^\\+27\\d{9}$");
+    // Messages (from the brief)
+    public static final String USERNAME_OK = "Username successfully captured.";
+    public static final String USERNAME_BAD = "Username is not correctly formatted; please ensure that "
+            + "your username contains an underscore and is no more than five characters in length.";
+    public static final String PASSWORD_OK = "Password successfully captured.";
+    public static final String PASSWORD_BAD = "Password is not correctly formatted; please ensure that "
+            + "the password contains at least eight characters, a capital letter, a number, and a special character.";
+    public static final String CELL_OK = "Cell number successfully captured.";
+    public static final String CELL_BAD = "Cell number is incorrectly formatted or does not contain an "
+            + "international code; please correct the number and try again.";
+
+    private final String userName;
+    private final String password;
+    private final String cellPhoneNumber;
+    private final String firstName;
+    private final String lastName;
 
     public Login(String userName, String password, String cellPhoneNumber,
                  String firstName, String lastName) {
@@ -28,138 +41,83 @@ public class Login {
         this.lastName = lastName;
     }
 
-    // ---------- GETTERS ----------
+    // ---------- Static validators (usable before a Login object exists) ----------
 
-    public String getUserName() {
-        return userName;
+    public static boolean isValidUserName(String s) {
+        return s != null && s.contains("_") && s.length() <= 5;
     }
 
-    public String getPassword() {
-        return password;
+    public static boolean isValidPassword(String s) {
+        if (s == null || s.length() < 8) {
+            return false;
+        }
+        boolean upper = s.chars().anyMatch(Character::isUpperCase);
+        boolean digit = s.chars().anyMatch(Character::isDigit);
+        boolean special = s.chars().anyMatch(c -> !Character.isLetterOrDigit(c) && !Character.isWhitespace(c));
+        return upper && digit && special;
     }
 
-    public String getCellPhoneNumber() {
-        return cellPhoneNumber;
+    public static boolean isValidCellPhone(String s) {
+        return s != null && CELL_PATTERN.matcher(s).matches();
     }
 
-    public String getFirstName() {
-        return firstName;
+    public static String userNameMessage(String s) {
+        return isValidUserName(s) ? USERNAME_OK : USERNAME_BAD;
     }
 
-    public String getLastName() {
-        return lastName;
+    public static String passwordMessage(String s) {
+        return isValidPassword(s) ? PASSWORD_OK : PASSWORD_BAD;
     }
 
-    // ---------- Validation ----------
+    public static String cellMessage(String s) {
+        return isValidCellPhone(s) ? CELL_OK : CELL_BAD;
+    }
 
-    /**
-     * Username must be no more than 5 characters long and must contain
-     * at least one uppercase letter, one lowercase letter, one digit,
-     * and one special character.
-     */
+    // ---------- Methods required by the brief ----------
+
     public boolean checkUserName() {
         return isValidUserName(userName);
     }
 
-    /**
-     * Password must be at least 8 characters long and must contain
-     * at least one uppercase letter, one lowercase letter, one digit,
-     * and one special character.
-     */
     public boolean checkPasswordComplexity() {
         return isValidPassword(password);
     }
 
-    /**
-     * Cellphone number must be in the South African format:
-     * "+27" followed by exactly 9 digits, e.g. +27838968976.
-     */
     public boolean checkCellPhoneNumber() {
         return isValidCellPhone(cellPhoneNumber);
     }
 
-    /**
-     * First and last names must not be empty and must contain letters only
-     * (spaces and hyphens allowed for double-barrelled names).
-     */
-    public boolean checkFirstName() {
-        return isValidName(firstName);
-    }
-
-    public boolean checkLastName() {
-        return isValidName(lastName);
-    }
-
-    // ---------- Static validators ----------
-    // These take a raw candidate String directly, so they can validate
-    // user input before a Login object even exists (e.g. during registration).
-
-    public static boolean isValidUserName(String candidate) {
-        if (candidate == null || candidate.isEmpty() || candidate.length() > 5) {
-            return false;
+    /** Returns the first problem found, or all three success messages. */
+    public String registerUser() {
+        if (!checkUserName()) {
+            return USERNAME_BAD;
         }
-        return hasUpper(candidate) && hasLower(candidate)
-                && hasDigit(candidate) && hasSpecial(candidate);
-    }
-
-    public static boolean isValidPassword(String candidate) {
-        if (candidate == null || candidate.length() < 8) {
-            return false;
+        if (!checkPasswordComplexity()) {
+            return PASSWORD_BAD;
         }
-        return hasUpper(candidate) && hasLower(candidate)
-                && hasDigit(candidate) && hasSpecial(candidate);
-    }
-
-    public static boolean isValidCellPhone(String candidate) {
-        if (candidate == null) {
-            return false;
+        if (!checkCellPhoneNumber()) {
+            return CELL_BAD;
         }
-        return CELLPHONE_PATTERN.matcher(candidate).matches();
+        return USERNAME_OK + "\n" + PASSWORD_OK + "\n" + CELL_OK;
     }
 
-    public static boolean isValidName(String candidate) {
-        if (candidate == null || candidate.trim().isEmpty()) {
-            return false;
+    /** True if the entered details match the registered details. */
+    public boolean loginUser(String enteredUserName, String enteredPassword) {
+        return userName.equals(enteredUserName) && password.equals(enteredPassword);
+    }
+
+    public String returnLoginStatus(boolean loggedIn) {
+        if (loggedIn) {
+            return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
         }
-        return candidate.matches("[A-Za-z\\-\\s]+");
+        return "Username or password incorrect, please try again.";
     }
 
-    // ---------- Helpers ----------
+    // ---------- Getters ----------
 
-    private static boolean hasUpper(String s) {
-        for (char c : s.toCharArray()) {
-            if (Character.isUpperCase(c)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean hasLower(String s) {
-        for (char c : s.toCharArray()) {
-            if (Character.isLowerCase(c)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean hasDigit(String s) {
-        for (char c : s.toCharArray()) {
-            if (Character.isDigit(c)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean hasSpecial(String s) {
-        for (char c : s.toCharArray()) {
-            if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public String getUserName() { return userName; }
+    public String getPassword() { return password; }
+    public String getCellPhoneNumber() { return cellPhoneNumber; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
 }
-
